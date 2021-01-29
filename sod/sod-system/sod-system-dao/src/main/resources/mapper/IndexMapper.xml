@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.piesat.sod.system.mapper.IndexMapper">
+	<!-- 获取数据库访问账户已审核数量 -->
+	<select id="findUpChecked" resultType="java.lang.Integer">
+		select
+			count(*)
+		from
+			t_sod_database_user
+		where
+			examine_status in ('1','2')
+	</select>
+	<!-- 获取数据库访问账户未审核数量 -->
+	<select id="findUpUncheck" resultType="java.lang.Integer">
+		select
+			count(*)
+		from
+			t_sod_database_user
+		where
+			examine_status = '0'
+	</select>
+	<!-- 获取云数据库已审核数量 -->
+	<select id="findCloudBChecked" resultType="java.lang.Integer">
+		select
+			count(*)
+		from
+			t_sod_cloud_database_apply
+		where
+			examine_status in ('02','03')
+	</select>
+	<!-- 获取云数据库未审核数量 -->
+	<select id="findCloudBUnchecked" resultType="java.lang.Integer">
+		select
+			count(*)
+		from
+			t_sod_cloud_database_apply
+		where
+			examine_status = '01'
+	</select>
+	<!-- 获取数据注册已审核数量 -->
+	<select id="findNewDataChecked" resultType="java.lang.Integer">
+		select
+			count(*)
+		from
+			t_sod_newdata_apply
+		where
+			examine_status in ('2','3')
+	</select>
+	<!--获取数据注册未审核数量  -->
+	<select id="findNewDataUncheck" resultType="java.lang.Integer">
+		select
+			count(*)
+		from
+			t_sod_newdata_apply
+		where
+			examine_status = '1'
+	</select>
+	<!-- 获取资料授权已审数量  -->
+	<select id="findDataAuthorChecked" resultType="java.lang.Integer">
+		select
+			count(*)
+		from
+			T_SOD_DATA_AUTHORITY_APPLY
+		where
+			audit_status = '02'
+	</select>
+	<!-- 获取资料授权待审数量 -->
+	<select id="findDataAuthorUncheck" resultType="java.lang.Integer">
+		select
+			count(*)
+		from
+			T_SOD_DATA_AUTHORITY_APPLY
+		where
+			audit_status != '02'
+	</select>
+	<!-- 获取专题库已审核数量 -->
+	<select id="findSpecialDbChecked" resultType="java.lang.Integer">
+		select
+			count(*)
+		from
+			t_sod_database_special
+		where
+			examine_status in ('2','3','4')
+	</select>
+	<!-- 获取专题库待审核数量  -->
+	<select id="findSpecialDbUncheck" resultType="java.lang.Integer">
+		select
+			count(*)
+		from
+			t_sod_database_special
+		where
+			examine_status = '1'
+	</select>
+	<!-- 获取近12个月的资料访问数量 -->
+	<select id="findDataMonthCount" resultType="java.util.Map">
+		select
+			 *
+		from
+			t_sod_data_class_count
+		order by
+			year desc,month desc
+		limit 12
+	</select>
+	<!--  获取文件列表 -->
+	<select id="findFileList" resultType="java.util.Map">
+		select
+			file_type,file_name,file_stor_path,file_stor_name
+		from
+			t_sod_db_file
+		order by
+			update_time desc
+		limit 12
+	</select>
+
+	<!-- 根据资料分类获取统计数量 -->
+	<select id="findDataCount" resultType="java.util.Map">
+		select
+			substr(t1.data_class_id,1,1) as "CLASSID", count(t1.data_class_id) as "NUM" ,t2.class_name
+		from
+			t_sod_data_class t1
+		left join
+			t_sod_data_class t2 on substr(t1.data_class_id,1,1) = t2.d_data_id
+		where
+			t1.type = 2
+		group by
+			substr(t1.data_class_id,1,1),t2.class_name
+		order by
+			substr(t1.data_class_id,1,1) asc
+	</select>
+
+	<!-- 获取逻辑库资料统计数量 -->
+	<select id="findLogicCountData" resultType="java.util.Map">
+		select
+			count(t1.data_class_id) as "num",t2.logic_flag as "databaseLogic", t2.logic_name as "logicName"
+		from
+			t_sod_data_logic t1
+		left join
+			t_sod_logic_define t2 on t1.logic_flag = t2.logic_flag
+	 	where
+	 		t2.logic_flag is not null
+		group by
+			t2.logic_flag,t2.logic_name
+	</select>
+	<!-- 获取专题库信息 -->
+	<select id="findSpecialDbList" resultType="java.util.Map">
+		select
+			*
+		from
+			t_sod_database_special
+		where
+			examine_status != '1'
+		order by
+			create_time desc
+		limit 12
+	</select>
+	<!-- 获取数据用途信息 -->
+	<select id="findLogicInfo" resultType="java.util.Map">
+		select
+			count(dl.data_class_id) as "num" ,dd.id as "databaseId",dd.database_name as "databaseName",
+			dci.total_capacity as "totalCapacity",dci.used_capacity as "usedCapacity"
+		from
+			t_sod_database_define dd
+		left join
+			t_sod_database d on dd.id=d.database_define_id
+		left join
+			t_sod_data_logic dl on dl.database_id = d.id
+		left join
+			t_sod_database_capacity_info dci on dd.id = dci.database_id
+		group by
+		dd.id,dd.database_name,dci.total_capacity,dci.used_capacity
+	</select>
+
+	<select id="findLogicCapacity" resultType="java.util.Map">
+		select
+			database_logic,sum(total_capacity) as total_capacity,sum(used_capacity) as  used_capacity
+		from
+			t_sod_database_capacity_info
+		group by database_logic
+	</select>
+
+	<select id="findLogicDataCount" resultType="java.util.Map">
+		select
+			t1.logic_flag,t1.logic_name,t1.logic_desc,count(t2.data_class_id) as num
+		from
+			t_sod_logic_define t1
+		left join
+			t_sod_data_logic t2 on t1.logic_flag = t2.logic_flag
+		group by
+			t1.logic_flag,t1.logic_name,t1.logic_desc
+	</select>
+
+	<select id="findLoigcDB" resultType="java.util.Map">
+		select
+			t1.logic_name,t1.logic_flag,t1.logic_desc,t2.database_id,
+			t3.database_name
+		from
+			t_sod_logic_define t1
+		left join
+			t_sod_logic_database t2 on t1.id = t2.logic_id
+		left join
+			t_sod_database_define t3 on t3.id = t2.database_id
+		order by t1.logic_flag desc
+	</select>
+</mapper>

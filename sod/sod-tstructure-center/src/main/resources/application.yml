@@ -1,0 +1,43 @@
+server:
+  port: 1236
+  #servlet:
+     # context-path: /generator
+tomcat:
+    remote-ip-header: x-forward-for
+    uri-encoding: UTF-8
+    max-threads: 10
+    background-processor-delay: 30
+    basedir: ${user.home}/tomcat/
+spring:
+  application:
+    name: local-grpc-cl
+  http:
+    encoding:
+      force: true
+      charset: utf-8
+      enabled: true
+  sleuth:
+    sampler:
+      probability: 1
+  redis:
+    host: 10.40.17.44
+    port: 6379
+    timeout: 5000
+    password:
+eureka:
+  instance:
+    prefer-ip-address: true
+    status-page-url-path: /actuator/info
+    health-check-url-path: /actuator/health
+    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://10.40.17.44:8761/eureka/
+grpc:
+  client:
+    ucenter-server:
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext

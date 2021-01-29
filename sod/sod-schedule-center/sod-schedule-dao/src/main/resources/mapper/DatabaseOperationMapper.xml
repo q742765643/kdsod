@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.piesat.schedule.mapper.DatabaseOperationMapper">
+    <select id="selectTableCount" parameterType="com.piesat.schedule.entity.DatabaseOperationVo" resultType="java.lang.Integer" >
+       SELECT COUNT(1)  from ${ktable}
+          where
+        ${conditions}
+    </select>
+    <select id="selectKtableMaxTime" parameterType="com.piesat.schedule.entity.DatabaseOperationVo" resultType="java.util.Date">
+      select min(d_datetime)
+         from ${ktable}
+          where
+        ${conditions}
+   </select>
+    <delete id="deleteVtable" parameterType="com.piesat.schedule.entity.DatabaseOperationVo">
+      DELETE a FROM ${vtable} a,(select * from  ${ktable} where  ${conditions} ) b where  ${fkconditions}
+
+    </delete>
+    <delete id="delteKtable" parameterType="com.piesat.schedule.entity.DatabaseOperationVo">
+        DELETE  FROM
+            ${ktable}
+        where
+            ${conditions}
+    </delete>
+
+    <select id="selectXuguPartition" resultType="java.util.Map">
+        select
+            parti_no,
+            parti_name,
+            parti_val
+        from
+            DBA_partis a
+        inner join DBA_tables b on
+            a.table_id = b.table_id
+        inner join DBA_schemas s on
+            s.schema_id = b.schema_id
+        where
+            schema_name =
+            #{schemaName} AND  table_name=#{tableName} and parti_no>0 order by parti_no
+    </select>
+    <delete id="deletePartition">
+        alter table ${tableName} drop partition ${partName} wait 120000
+    </delete>
+    <select id="selectByKCondition"  parameterType="com.piesat.schedule.entity.DatabaseOperationVo" resultType="java.util.Map">
+         SELECT *  from ${ktable}
+          where
+        ${conditions}
+    </select>
+    <select id="selectByVCondition" parameterType="com.piesat.schedule.entity.DatabaseOperationVo" resultType="java.util.Map">
+       select a.* from ${vtable} a,( select *
+        from
+        ${ktable}
+        where
+        ${conditions}
+        ) b where ${fkconditions}
+    </select>
+    <update id="updateIndex" parameterType="com.piesat.schedule.entity.IndexVo">
+        update ${table} set D_FILE_SAVE_HIERARCHY = '1',d_storage_site=#{newPath} where  ${conditions};
+    </update>
+    <delete id="deleteIndex">
+      delete from ${table} where  ${conditions};
+    </delete>
+</mapper>

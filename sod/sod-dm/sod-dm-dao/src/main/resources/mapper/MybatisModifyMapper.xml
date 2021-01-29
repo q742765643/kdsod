@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.piesat.dm.mapper.MybatisModifyMapper">
+
+    <update id="updateDataAuthorityConfig" parameterType="StorageConfigurationEntity">
+        update T_SOD_STORAGE_CONFIGURATION
+        <set>
+            <if test="storageDefineIdentifier != null">
+                storage_define_identifier = #{storageDefineIdentifier},
+            </if>
+            <if test="syncIdentifier != null">
+                sync_identifier = #{syncIdentifier},
+            </if>
+            <if test="cleanIdentifier != null">
+                clean_identifier = #{cleanIdentifier},
+            </if>
+            <if test="moveIdentifier != null">
+                move_identifier = #{moveIdentifier},
+            </if>
+            <if test="backupIdentifier != null">
+                backup_identifier = #{backupIdentifier},
+            </if>
+            <if test="syncId != null">
+                sync_id = #{syncId},
+            </if>
+            <if test="clearId != null">
+                clear_id = #{clearId},
+            </if>
+            <if test="moveId != null">
+                move_id = #{moveId},
+            </if>
+            <if test="backupId != null">
+                backup_id = #{backupId},
+            </if>
+        </set>
+        where  class_logic_id = #{classLogicId}
+    </update>
+
+    <update id="modifyDatabaseSpecialReadWrite" parameterType="databaseSpecialReadWriteEntity">
+        update t_sod_database_special_read_write
+        <set>
+            <if test="examineStatus != null">
+                examine_status = #{examineStatus},
+            </if>
+            <if test="failureReason != null">
+                failure_reason = #{failureReason},
+            </if>
+            <if test="examineTime != null">
+                examine_time = #{examineTime},
+            </if>
+            <if test="examiner != null">
+                examiner = #{examiner},
+            </if>
+        </set>
+        where  sdb_id = #{sdbId} and data_class_id = #{dataClassId}
+    </update>
+    <update id="updateSpecialAccess" parameterType="DatabaseSpecialAccessEntity">
+        update T_SOD_DATABASE_SPECIAL_ACCESS
+        <set>
+            <if test="examineStatus != null">
+                examine_status = #{examineStatus},
+            </if>
+            <if test="failureReason != null">
+                failure_reason = #{failureReason},
+            </if>
+            <if test="examiner != null">
+                examiner = #{examiner},
+            </if>
+            <if test="examineTime != null">
+                examine_time = #{examineTime},
+            </if>
+            <if test="useStatus != null">
+                use_status = #{useStatus},
+            </if>
+        </set>
+        where  sdb_id = #{sdbId} and user_id = #{userId}
+    </update>
+
+    <update id="countNewDatabaseInfo">
+        DELETE FROM T_SOD_TABLEDATA_STATISTICS_LATELY;
+        INSERT INTO T_SOD_TABLEDATA_STATISTICS_LATELY
+        SELECT M.* FROM T_SOD_TABLEDATA_STATISTICS M,
+        (SELECT TABLE_ID,MAX(STATISTIC_TIME)STATISTIC_TIME FROM T_SOD_TABLEDATA_STATISTICS GROUP BY table_id)N
+        WHERE M.table_id = N.TABLE_ID AND M.STATISTIC_TIME = N.STATISTIC_TIME
+    </update>
+
+    <update id="updateSql" parameterType="java.lang.String">
+        ${dataSql}
+    </update>
+
+    <!--pg、mysql-->
+    <!--<update id="insertIntoPathStatistics" parameterType="java.util.List">
+        insert into T_SOD_PATH_STATISTICS(id,data_class_id,path,path_size,create_time)values
+        <foreach collection ="list" item="pathInfo" index= "index" separator =",">
+          (
+            '${pathInfo.id}',
+            '${pathInfo.data_class_id}',
+            '${pathInfo.path}',
+            '${pathInfo.path_size}',
+            '${pathInfo.create_time}'
+          )
+        </foreach >
+    </update>-->
+    <!--虚谷-->
+    <update id="insertIntoPathStatistics" parameterType="java.util.List">
+        <foreach collection ="list" item="pathInfo" index= "index" separator =";">
+            insert into T_SOD_PATH_STATISTICS(id,data_class_id,path,path_size,create_time)values
+            (
+            '${pathInfo.id}',
+            '${pathInfo.data_class_id}',
+            '${pathInfo.path}',
+            '${pathInfo.path_size}',
+            '${pathInfo.create_time}'
+            )
+        </foreach >
+    </update>
+
+</mapper>
