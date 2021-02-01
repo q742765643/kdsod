@@ -22,11 +22,7 @@ import java.util.Date;
 public class FileCassandraSodEntity implements Serializable {
     @EmbeddedId
     private FileCassandraSodPk id;
-    /**
-     * 资料标识
-     */
-    @Column(name = "D_DATA_ID")
-    private String ddataId;
+
 
     /**
      * 入库表名

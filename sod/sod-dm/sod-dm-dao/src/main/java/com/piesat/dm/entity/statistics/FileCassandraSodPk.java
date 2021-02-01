@@ -50,5 +50,11 @@ public class FileCassandraSodPk implements Serializable {
      */
     @Column(name = "SLICEY")
     private BigDecimal slicey;
+
+    /**
+     * 资料标识
+     */
+    @Column(name = "D_DATA_ID")
+    private String ddataId;
 }
 
