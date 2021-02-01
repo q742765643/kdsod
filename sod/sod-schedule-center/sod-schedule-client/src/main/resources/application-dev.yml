@@ -36,15 +36,16 @@ spring:
       max-file-size: 1000000000
       max-request-size: 1000000000
   datasource:
-      #driver-class-name: com.xugu.cloudjdbc.Driver
-      #url: jdbc:xugu://10.40.16.44:31293/babjbdb?char_set=utf8
-      #username: sod5
-      #password: 123456
-      driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://10.1.6.117:8000/sod
-      username: root
-      password: root
-      type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: org.postgresql.Driver
+    #url: jdbc:xugu://10.40.16.40:5138/BABJ_SMDB?char_set=utf8
+    #username: ENC(YxpGRv4xpm1043WVImWDSw==)
+    #password: ENC(bire96k+Qd6VvF2VwuJRtvzail6DL4s5)
+    url: jdbc:postgresql://10.1.100.8:5432/kddb?currentSchema=usr_sod
+    username: postgres
+    #password: ENC(c50mzX6HB5LbLvohno/sRHtY8ASWFjVT)
+    password: postgres
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
       # 下面为连接池的补充设置，应用到上面所有数据源中
       # 初始化大小，最小，最大
       initialSize: 1
@@ -66,25 +67,16 @@ spring:
         hbm2ddl:
           auto: update
         #dialect: com.xugu.dialect.XuguDialect5
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        dialect: com.piesat.common.jpa.dialect.PostgreDialect
         format_sql: true
     show-sql: true
     #database: mysql
     open-in-view: false
   redis:
-    password: Cmadaas@2019
-    cluster:
-      nodes: 10.1.100.33:6378,10.1.100.33:6380,10.1.100.33:6381,10.1.100.34:6382,10.1.100.34:6383,10.1.100.34:6384
-      max-redirects: 3
-    lettuce:
-      pool:
-        max-idle: 16
-        max-active: 32
-        min-idle: 8
-#    host: 10.1.6.117
-#    port: 8001
-#    timeout: 5000
-#    password:
+    host: 10.1.100.8
+    port: 6379
+    timeout: 50000
+    password:
 mybatis:
   type-aliases-package: com.piesat.*.entity
   mapper-locations: classpath:mapper/*.xml
@@ -93,7 +85,7 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 #分页插件
 pagehelper:
-  helper-dialect: mysql
+  helper-dialect: postgresql
   reasonable: true
   support-methods-arguments: true
   params: count=countSql
@@ -106,7 +98,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://10.1.6.117:8002/eureka/
+      defaultZone: http://127.0.0.1:28328/eureka/
 
 backup:
   temp-path: /zzj/CMADASS
@@ -123,3 +115,7 @@ log:
 jasypt:
   encryptor:
     password: HT95279527
+EIDI:
+  URL: http://10.20.67.139/store/openapi/v2/logs/push_batch?apikey=e10adc3949ba59abbe56e057f2gg88dd
+TRANSFER:
+  URL: http://127.0.0.1:29999/transfer

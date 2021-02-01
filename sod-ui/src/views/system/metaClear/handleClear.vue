@@ -47,6 +47,15 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <el-form-item label="是否删除分区" prop="partiOff">
+            <el-switch
+              v-model.trim="msgFormDialog.partiOff"
+              active-value="1"
+              inactive-value="0"
+              active-color="#13ce66"
+              inactive-color="#ccc"
+            ></el-switch>
+          </el-form-item>
           <el-form-item label="where条件" prop="conditions">
             <el-input size="small" v-model.trim="msgFormDialog.conditions"></el-input>
           </el-form-item>
@@ -121,6 +130,7 @@ export default {
         databaseId: "",
         jobCron: "0 0 2 * * ?",
         conditions: "",
+        partiOff:"1"
       },
       ipList: [],
       defaultProps: {
