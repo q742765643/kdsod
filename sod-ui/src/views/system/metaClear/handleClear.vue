@@ -131,6 +131,7 @@ export default {
         jobCron: "0 0 2 * * ?",
         conditions: "",
         partiOff:"1"
+        
       },
       ipList: [],
       defaultProps: {
