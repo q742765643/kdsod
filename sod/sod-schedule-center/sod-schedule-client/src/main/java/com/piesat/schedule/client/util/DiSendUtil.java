@@ -46,7 +46,7 @@ public class DiSendUtil {
     }
 
     public static void send(long occurTime, String message, DiSendVo diSendVo) {
-        diSendVo.setSystem("SOD");
+        /*diSendVo.setSystem("SOD");
         LinkedHashMap map = new LinkedHashMap();
         map.put("type", "OT.TASKINFO.DI");
         map.put("name", "定时任务运行详细信息");
@@ -84,7 +84,7 @@ public class DiSendUtil {
             result=true;
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
         /*
         logger.info("di发送成功返回信息:{}",JSON.toJSONString(stringResponseEntity));
         if(!result){

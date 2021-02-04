@@ -52,7 +52,7 @@ public class EiSendUtil {
         TRANSFERURL = transferUrl;
     }
     public static void send(EiSendVo eiSendVo, int type, String kIndex, long occurTime, ResultT<String> resultT) {
-        eiSendVo.setSystem("SOD");
+  /*      eiSendVo.setSystem("SOD");
         eiSendVo.setKindex(kIndex);
         eiSendVo.setOrgTime(new SimpleDateFormat("yyyyMMdd'T'HHmmss").format(new Date()));
         eiSendVo.setEventTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis())));
@@ -102,7 +102,7 @@ public class EiSendUtil {
             logger.info("ei发送返回信息:{}", JSON.toJSONString(stringResponseEntity));
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
 
     }

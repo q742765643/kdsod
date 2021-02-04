@@ -1531,10 +1531,24 @@
                 v_tablename = #{params.vtableName}
             </if>
             <if test="params.beginTime != null and params.beginTime != ''">
-                and time &gt;= #{params.beginTime}
+                and D_IYMDHM &gt;= #{params.beginTime}
             </if>
             <if test="params.endTime != null and params.endTime != ''">
-                and time  &lt; #{params.endTime}
+                and D_IYMDHM  &lt; #{params.endTime}
+            </if>
+        </where>
+    </select>
+    <select id="queryIncreCountXugu" resultType="java.util.Map">
+        select count(1) as count from  T_SOD_LOG_FILE_XUGU_DPC
+        <where>
+            <if test="params.vtableName != null and params.vtableName != ''">
+                v_tablename = #{params.vtableName}
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''">
+                and D_IYMDHM &gt;= #{params.beginTime}
+            </if>
+            <if test="params.endTime != null and params.endTime != ''">
+                and D_IYMDHM  &lt; #{params.endTime}
             </if>
         </where>
     </select>
@@ -1545,10 +1559,10 @@
                 v_tablename = #{params.vtableName}
             </if>
             <if test="params.beginTime != null and params.beginTime != ''">
-                and d_datetime &gt;= #{params.beginTime}
+                and D_IYMDHM &gt;= #{params.beginTime}
             </if>
             <if test="params.endTime != null and params.endTime != ''">
-                and d_datetime  &lt; #{params.endTime}
+                and D_IYMDHM  &lt; #{params.endTime}
             </if>
         </where>
     </select>

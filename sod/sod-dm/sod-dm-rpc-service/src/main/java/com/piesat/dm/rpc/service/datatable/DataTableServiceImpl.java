@@ -590,9 +590,9 @@ public class DataTableServiceImpl extends BaseService<DataTableEntity> implement
                     }
 
                     if(builderWhere.length()>0){
-                        builderWhere.append(" and v_tablename='"+tableName+"'");
+                        builderWhere.append(" and v_tablename='"+tableName.toUpperCase()+"'");
                     }else {
-                        builderWhere.append(" where v_tablename='"+tableName+"'");
+                        builderWhere.append(" where v_tablename='"+tableName.toUpperCase()+"'");
                     }
                     String countSql = "SELECT count(*) as num FROM t_sod_log_file_cassandra_sod"+builderWhere.toString();//+ " allow filtering"
                     long totalCount=fileCassandraSodService.queryCassandra(countSql);

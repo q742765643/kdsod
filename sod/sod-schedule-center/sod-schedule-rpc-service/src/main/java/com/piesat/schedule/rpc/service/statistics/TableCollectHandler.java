@@ -183,7 +183,8 @@ public class TableCollectHandler  implements BaseHandler {
                                     //最近记录的时间
                                     end_time = databaseDcl.queryMaxTime(databaseEntity.getSchemaName(), table_name, "D_DATETIME");
                                     //获取日增量
-                                    day_total = databaseDcl.queryIncreCount(databaseEntity.getSchemaName(), table_name, "D_DATETIME", yesterdayZero, todayZero);
+                                    day_total = fileCassandraSodService.queryIncreCountXugu(databaseEntity.getSchemaName(), table_name, "D_IYMDHM", yesterdayZero, todayZero);
+                                    //day_total = databaseDcl.queryIncreCount(databaseEntity.getSchemaName(), table_name, "D_IYMDHM", yesterdayZero, todayZero);
                                     tableCollectInfo.put(table_name, begin_time + "," + end_time + "," + record_count + "," + day_total);
                                 }
 
@@ -213,7 +214,10 @@ public class TableCollectHandler  implements BaseHandler {
                         if (StringUtils.isNotNullString(day_total)) {
                             tableDataStatisticsEntity.setDayTotal(Integer.valueOf(day_total));
                         }
-                        this.queryElapsedTime(tableDataStatisticsEntity,schemaName,table_name, "D_DATETIME", yesterdayZero, todayZero);
+                        if ("Cassandra".equalsIgnoreCase(databaseType)) {
+                        }else {
+                            this.queryElapsedTime(tableDataStatisticsEntity, schemaName, table_name, "D_DATETIME", yesterdayZero, todayZero);
+                        }
                         tableDataStatisticsDao.saveNotNull(tableDataStatisticsEntity);
                     }
 

@@ -26,6 +26,7 @@ public class FileCassandraSodServiceImpl implements FileCassandraSodService {
     public String queryRecordNum(String schema, String tableName) throws Exception {
         String num = "";
         try {
+            tableName=tableName.toUpperCase();
            Map<String,Object> params=new HashMap<>();
            params.put("vtableName",tableName);
            Map<String,Object> result= mybatisQueryMapper.queryRecordNum(params);
@@ -42,6 +43,7 @@ public class FileCassandraSodServiceImpl implements FileCassandraSodService {
     public String queryMinTime(String schema, String tableName, String timeColumnName) throws Exception {
         String minTime = "";
         try {
+            tableName=tableName.toUpperCase();
             Map<String,Object> params=new HashMap<>();
             params.put("vtableName",tableName);
             Map<String,Object> result= mybatisQueryMapper.queryMinTime(params);
@@ -58,6 +60,7 @@ public class FileCassandraSodServiceImpl implements FileCassandraSodService {
     public String queryMaxTime(String schema, String tableName, String timeColumnName) throws Exception {
         String maxTime = "";
         try {
+            tableName=tableName.toUpperCase();
             Map<String,Object> params=new HashMap<>();
             params.put("vtableName",tableName);
             Map<String,Object> result= mybatisQueryMapper.queryMaxTime(params);
@@ -74,6 +77,7 @@ public class FileCassandraSodServiceImpl implements FileCassandraSodService {
     public String queryIncreCount(String schema, String tableName, String timeColumnName, String beginTime, String endTime) throws Exception {
         String num = "";
         try {
+            tableName=tableName.toUpperCase();
             Map<String,Object> params=new HashMap<>();
             params.put("vtableName",tableName);
             params.put("beginTime",beginTime);
@@ -89,9 +93,30 @@ public class FileCassandraSodServiceImpl implements FileCassandraSodService {
         return num;
     }
     @Override
+    public String queryIncreCountXugu(String schema, String tableName, String timeColumnName, String beginTime, String endTime) throws Exception {
+        String num = "";
+        try {
+            tableName=tableName.toUpperCase();
+            Map<String,Object> params=new HashMap<>();
+            params.put("vtableName",tableName);
+            params.put("beginTime",beginTime);
+            params.put("endTime",endTime);
+            Map<String,Object> result= mybatisQueryMapper.queryIncreCount(params);
+            if(null!=result&&null!=result.get("COUNT")){
+                num=String.valueOf(result.get("COUNT"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("错误：" + e.getMessage());
+        }
+        return num;
+    }
+
+    @Override
     public String queryElapsedTime(String schema, String tableName, String timeColumnName, String beginTime, String endTime) throws Exception {
         String num = "";
         try {
+            tableName=tableName.toUpperCase();
             Map<String,Object> params=new HashMap<>();
             params.put("vtableName",tableName);
             params.put("beginTime",beginTime);

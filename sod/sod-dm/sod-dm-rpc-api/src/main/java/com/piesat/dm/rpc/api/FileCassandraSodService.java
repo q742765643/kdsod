@@ -9,6 +9,8 @@ public interface FileCassandraSodService {
 
     public String queryIncreCount(String schema, String tableName, String timeColumnName, String beginTime, String endTime) throws Exception;
 
+    public String queryIncreCountXugu(String schema, String tableName, String timeColumnName, String beginTime, String endTime) throws Exception;
+
     public String queryElapsedTime(String schema, String tableName, String timeColumnName, String beginTime, String endTime) throws Exception;
 
     public long queryCassandra(String dataSql);

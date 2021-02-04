@@ -240,6 +240,9 @@ public interface MybatisQueryMapper {
 
     Map<String,Object> queryIncreCount(@Param("params") Map<String, Object> map);
 
+    Map<String,Object> queryIncreCountXugu(@Param("params") Map<String, Object> map);
+
+
     Map<String,Object> queryElapsedTime(@Param("params") Map<String, Object> map);
 
     Map<String,Object> queryCassandra(@Param("dataSql") String dataSql);
