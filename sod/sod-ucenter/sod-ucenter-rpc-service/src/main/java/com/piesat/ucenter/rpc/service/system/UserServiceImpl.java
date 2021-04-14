@@ -614,4 +614,9 @@ public class UserServiceImpl extends BaseService<UserEntity> implements UserServ
         this.saveNotNull(this.userMapstruct.toEntity(user));
         return ResultT.success();
     }
+
+    public static void main(String[] args) throws Exception {
+        String password = new Md5Hash("111111", "admin", 2).toString();
+        System.out.println(password);
+    }
 }

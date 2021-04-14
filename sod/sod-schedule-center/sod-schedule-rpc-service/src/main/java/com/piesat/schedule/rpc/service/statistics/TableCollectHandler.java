@@ -6,6 +6,7 @@ import com.piesat.common.utils.StringUtils;
 import com.piesat.dm.core.api.DatabaseDcl;
 import com.piesat.dm.core.api.impl.Cassandra;
 import com.piesat.dm.core.api.impl.Gbase8a;
+import com.piesat.dm.core.api.impl.PostgreSql;
 import com.piesat.dm.core.api.impl.Xugu;
 import com.piesat.dm.dao.database.DatabaseDao;
 import com.piesat.dm.dao.datatable.TableDataStatisticsDao;
@@ -13,6 +14,7 @@ import com.piesat.dm.entity.database.DatabaseAdministratorEntity;
 import com.piesat.dm.entity.database.DatabaseEntity;
 import com.piesat.dm.entity.datatable.TableDataStatisticsEntity;
 import com.piesat.dm.rpc.api.FileCassandraSodService;
+import com.piesat.dm.rpc.api.PortalService;
 import com.piesat.dm.rpc.api.datatable.DataTableService;
 import com.piesat.dm.rpc.api.datatable.TableDataStatisticsService;
 import com.piesat.dm.rpc.dto.database.DatabaseAdministratorDto;
@@ -52,6 +54,8 @@ public class TableCollectHandler  implements BaseHandler {
     private TableDataStatisticsDao tableDataStatisticsDao;
     @GrpcHthtClient
     private TableDataStatisticsService tableDataStatisticsService;
+    @GrpcHthtClient
+    private PortalService portalService;
     @Autowired
     private FileCassandraSodService fileCassandraSodService;
 
@@ -114,10 +118,10 @@ public class TableCollectHandler  implements BaseHandler {
                     } else if ("gbase8a".equalsIgnoreCase(databaseType)) {
                         Gbase8a gbase8a = new Gbase8a(databaseUrl, databaseAdministratorEntity.getUserName(), databaseAdministratorEntity.getPassWord());
                         databaseDcl = gbase8a;
-                    }/*else if ("Cassandra".equalsIgnoreCase(databaseType)){
-                        Cassandra cassandra  = new Cassandra(databaseIp, Integer.parseInt(databasePort), databaseAdministratorEntity.getUserName(), databaseAdministratorEntity.getPassWord(), databaseEntity.getSchemaName());
-                        databaseDcl=cassandra;
-                    }*/
+                    }else if ("postgresql".equalsIgnoreCase(databaseType)){
+                        PostgreSql postgreSql = new PostgreSql(databaseUrl, databaseAdministratorEntity.getUserName(), databaseAdministratorEntity.getPassWord());
+                        databaseDcl=postgreSql;
+                    }
                     if(null==databaseDcl&&!"Cassandra".equalsIgnoreCase(databaseType)){
                         continue;
                     }
@@ -197,10 +201,14 @@ public class TableCollectHandler  implements BaseHandler {
 
                         //入库
                         TableDataStatisticsEntity tableDataStatisticsEntity = new TableDataStatisticsEntity();
+                        tableDataStatisticsEntity.setDatabaseType(databaseType);
                         tableDataStatisticsEntity.setTableId(String.valueOf(tableInfo.get("id")));
                         tableDataStatisticsEntity.setDatabaseId(databaseEntity.getId());
                         tableDataStatisticsEntity.setStatisticTime(sdf.format(new Date()));
                         tableDataStatisticsEntity.setStatisticDate(DateUtils.dateTime("yyyy-MM-dd HH:mm:ss", yesterdayZero));
+                        tableDataStatisticsEntity.setFileSize(new BigDecimal(0));
+                        tableDataStatisticsEntity.setElapsedTime(new BigDecimal(0));
+                        tableDataStatisticsEntity.setRecordCount(0.0);
                         //tableDataStatisticsEntity.setStatisticDate(yesterdayZero);
                         if (StringUtils.isNotNullString(begin_time)) {
                             tableDataStatisticsEntity.setBeginTime(DateUtils.dateTime("yyyy-MM-dd HH:mm:ss", begin_time));
@@ -214,10 +222,28 @@ public class TableCollectHandler  implements BaseHandler {
                         if (StringUtils.isNotNullString(day_total)) {
                             tableDataStatisticsEntity.setDayTotal(Integer.valueOf(day_total));
                         }
+                        if(databaseEntity.getDatabaseDefine().getId().indexOf("FIDB")!=-1){
+                            try {
+                                String fileSize=databaseDcl.queryFileSize(schemaName,table_name,"D_FILE_SIZE");
+                                if(StringUtils.isNotEmpty(fileSize)){
+                                    tableDataStatisticsEntity.setFileSize(new BigDecimal(fileSize));
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
                         if ("Cassandra".equalsIgnoreCase(databaseType)) {
                         }else {
                             this.queryElapsedTime(tableDataStatisticsEntity, schemaName, table_name, "D_DATETIME", yesterdayZero, todayZero);
                         }
+                        List<Map<String,Object>> mapList=portalService.queryParent(null, ((String) tableInfo.get("data_class_id")).substring(1,1));
+                        if(null!=mapList&&mapList.size()>0){
+                            Map<String,Object> name=mapList.get(0);
+                            tableDataStatisticsEntity.setParentId((String) name.get("PARENTID"));
+                            tableDataStatisticsEntity.setParentName((String) name.get("PARENTNAME"));
+                        }
+                        tableDataStatisticsEntity.setDataclassName((String) tableInfo.get("data_service_name"));
+                        tableDataStatisticsEntity.setDataclassId((String) tableInfo.get("data_class_id"));
                         tableDataStatisticsDao.saveNotNull(tableDataStatisticsEntity);
                     }
 

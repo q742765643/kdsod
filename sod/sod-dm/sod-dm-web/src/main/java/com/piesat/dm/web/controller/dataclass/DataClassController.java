@@ -59,9 +59,12 @@ public class DataClassController {
             dataClassDto.setMetaDataName(dataClassDto.getClassName());
         }
         DataClassDto byDataClassId = this.dataClassService.findByDataClassId(dataClassDto.getDataClassId());
-        if (StringUtils.isEmpty(dataClassDto.getId()) && byDataClassId != null) {
+        if (StringUtils.isEmpty(dataClassDto.getId()) && byDataClassId != null&&!byDataClassId.getId().equals(dataClassDto.getId())) {
             return ResultT.failed("存储编码已经存在！");
         }
+        //if(StringUtils.isEmpty(dataClassDto.getDDataId())){
+            dataClassDto.setDDataId(dataClassDto.getDataClassId());
+        //}
         try {
             DataClassDto save = this.dataClassService.saveDto(dataClassDto);
             return ResultT.success(save);

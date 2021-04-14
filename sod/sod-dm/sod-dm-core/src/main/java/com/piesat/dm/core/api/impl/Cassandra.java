@@ -448,5 +448,10 @@ public class Cassandra implements DatabaseDcl {
         instance.execute(bound);
         return true;
     }
+    public String queryFileSize(String schema, String tableName, String timeColumnName) throws Exception {
+        String fileSize = "";
+        return fileSize;
+    }
+
 
 }

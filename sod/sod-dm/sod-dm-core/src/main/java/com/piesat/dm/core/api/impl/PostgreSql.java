@@ -454,6 +454,21 @@ public class PostgreSql extends AbstractDatabaseDcl {
         }
         return false;
     }
+    public String queryFileSize(String schema, String tableName, String timeColumnName) throws Exception {
+        String fileSize = "";
+        String sql = "SELECT SUM(" + timeColumnName + ") FROM " + schema + "." + tableName;
+        try {
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                fileSize = rs.getString(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new Exception("错误：" + e.getMessage());
+        }
+        return fileSize;
+    }
 
 }
 

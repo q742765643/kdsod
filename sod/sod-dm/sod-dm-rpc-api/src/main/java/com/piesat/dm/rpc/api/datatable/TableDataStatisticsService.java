@@ -35,4 +35,6 @@ public interface TableDataStatisticsService {
     void countNewDatabaseInfo();
 
     void countFilePathInfo();
+
+    public PageBean portalList(PageForm<TableDataStatisticsDto> pageForm);
 }

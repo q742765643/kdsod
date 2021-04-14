@@ -247,4 +247,8 @@ public interface MybatisQueryMapper {
 
     Map<String,Object> queryCassandra(@Param("dataSql") String dataSql);
 
+    List<Map<String, Object>> queryParent(@Param("parentName")String parentName, @Param("parentId")String parentId);
+
+    List<Map<String, Object>> queryChild(@Param("parentId")String parentId);
+
 }

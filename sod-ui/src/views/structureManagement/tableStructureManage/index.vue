@@ -635,6 +635,8 @@ export default {
         this.$refs.classifyTree.initMethodsTree(this.whichTree);
       } else {
         if (this.materialSingleTitle == "编辑资料") {
+          this.currentRow=[];
+          this.$refs.classifyTree.initMethodsTree(this.whichTree);
           this.searchFun("search");
         } else {
           this.$refs.classifyTree.initMethodsTree(this.whichTree);

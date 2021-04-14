@@ -47,4 +47,18 @@ public class TableDataStatisticsEntity extends BaseEntity {
 
     @Column(name = "elapsed_time", length = 255)
     private BigDecimal elapsedTime;
+
+    @Column(name = "file_size", length = 255)
+    private BigDecimal fileSize;
+
+    @Column(name = "parent_id", length = 255)
+    private String parentId;
+    @Column(name = "data_class_id", length = 255)
+    private String dataclassId;
+    @Column(name = "parent_name", length = 255)
+    private String parentName;
+    @Column(name = "data_class_name", length = 255)
+    private String dataclassName;
+    @Column(name = "database_type", length = 255)
+    private String databaseType;
 }

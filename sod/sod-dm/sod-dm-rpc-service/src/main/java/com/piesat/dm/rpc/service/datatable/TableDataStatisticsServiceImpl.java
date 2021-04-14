@@ -84,13 +84,54 @@ public class TableDataStatisticsServiceImpl extends BaseService<TableDataStatist
         if (StringUtils.isNotBlank(tableDataStatisticsEntity.getDatabaseId())) {
             ssb.add("databaseId", SpecificationOperator.Operator.eq.name(), tableDataStatisticsEntity.getDatabaseId());
         }
+        if (StringUtils.isNotBlank(tableDataStatisticsEntity.getParentId())) {
+            ssb.add("parentId", SpecificationOperator.Operator.eq.name(), tableDataStatisticsEntity.getParentId());
+        }
+        if (StringUtils.isNotBlank(tableDataStatisticsEntity.getParentName())) {
+            ssb.add("parentName", SpecificationOperator.Operator.likeAll.name(), tableDataStatisticsEntity.getParentName());
+        }
+        if (StringUtils.isNotBlank(tableDataStatisticsEntity.getDataclassId())) {
+            ssb.add("dataclassId", SpecificationOperator.Operator.eq.name(), tableDataStatisticsEntity.getDataclassId());
+        }
+        if (StringUtils.isNotBlank(tableDataStatisticsEntity.getDataclassName())) {
+            ssb.add("dataclassName", SpecificationOperator.Operator.likeAll.name(), tableDataStatisticsEntity.getDataclassName());
+        }
         Sort sort = Sort.by(Sort.Direction.DESC, "statisticDate");
         PageBean page = this.getPage(ssb.generateSpecification(), pageForm, sort);
         List<TableDataStatisticsEntity> pageData = (List<TableDataStatisticsEntity>)page.getPageData();
         page.setPageData(this.tableDataStatisticsMapper.toDto(pageData));
         return page;
     }
+    @Override
+    public PageBean portalList(PageForm<TableDataStatisticsDto> pageForm) {
+        TableDataStatisticsEntity tableDataStatisticsEntity = tableDataStatisticsMapper.toEntity(pageForm.getT());
 
+        SimpleSpecificationBuilder ssb = new SimpleSpecificationBuilder();
+        ssb.add("databaseType",SpecificationOperator.Operator.notEqual.name(),"Cassandra");
+        if (StringUtils.isNotBlank(tableDataStatisticsEntity.getTableId())) {
+            ssb.add("tableId", SpecificationOperator.Operator.eq.name(), tableDataStatisticsEntity.getTableId());
+        }
+        if (StringUtils.isNotBlank(tableDataStatisticsEntity.getDatabaseId())) {
+            ssb.add("databaseId", SpecificationOperator.Operator.eq.name(), tableDataStatisticsEntity.getDatabaseId());
+        }
+        if (StringUtils.isNotBlank(tableDataStatisticsEntity.getParentId())) {
+            ssb.add("parentId", SpecificationOperator.Operator.eq.name(), tableDataStatisticsEntity.getParentId());
+        }
+        if (StringUtils.isNotBlank(tableDataStatisticsEntity.getParentName())) {
+            ssb.add("parentName", SpecificationOperator.Operator.likeAll.name(), tableDataStatisticsEntity.getParentName());
+        }
+        if (StringUtils.isNotBlank(tableDataStatisticsEntity.getDataclassId())) {
+            ssb.add("dataclassId", SpecificationOperator.Operator.eq.name(), tableDataStatisticsEntity.getDataclassId());
+        }
+        if (StringUtils.isNotBlank(tableDataStatisticsEntity.getDataclassName())) {
+            ssb.add("dataclassName", SpecificationOperator.Operator.likeAll.name(), tableDataStatisticsEntity.getDataclassName());
+        }
+        Sort sort = Sort.by(Sort.Direction.DESC, "statisticDate");
+        PageBean page = this.getPage(ssb.generateSpecification(), pageForm, sort);
+        List<TableDataStatisticsEntity> pageData = (List<TableDataStatisticsEntity>)page.getPageData();
+        page.setPageData(this.tableDataStatisticsMapper.toDto(pageData));
+        return page;
+    }
     @Override
     public Map<String, Object> getOnlineTime(String classDataId, String statisticDate) {
 

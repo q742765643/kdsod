@@ -1,3 +1,4 @@
+/*
 import com.piesat.schedule.rpc.api.backup.BackupService;
 import com.piesat.schedule.rpc.dto.backup.BackUpDto;
 import com.piesat.schedule.web.controller.ScheduleApplication;
@@ -7,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+*/
 /**
  * @program: sod
  * @description:
  * @author: zzj
  * @create: 2019-12-20 16:59
- **/
+ **//*
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ScheduleApplication.class)
 public class JobTest {
@@ -41,3 +44,4 @@ public class JobTest {
     }
 }
 
+*/

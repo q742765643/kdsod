@@ -221,4 +221,6 @@ public interface DatabaseDcl {
     boolean udpateSql(String deleteSql);
 
     public boolean udpateSql(String updateSql,List<Object> list);
+
+    public String queryFileSize(String schema, String tableName, String timeColumnName) throws Exception;
 }

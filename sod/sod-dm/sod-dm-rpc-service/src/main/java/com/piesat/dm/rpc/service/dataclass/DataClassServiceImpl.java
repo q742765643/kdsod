@@ -312,14 +312,14 @@ public class DataClassServiceImpl extends BaseService<DataClassEntity> implement
             all = this.getAll(sort);
         }
         for (DataClassEntity d : all) {
-            if(d.getDataClassId().startsWith("L")){
+            //if(d.getDataClassId().startsWith("L")){
                 TreeLevel tl = new TreeLevel();
                 tl.setId(d.getDataClassId());
                 tl.setParentId(d.getParentId());
                 tl.setName(d.getClassName());
                 tl.setType(Integer.toString(d.getType()));
                 l.add(tl);
-            }
+            //}
         }
         return JSONArray.parseArray(BaseParser.parserListToLevelTree(l));
     }
@@ -334,14 +334,14 @@ public class DataClassServiceImpl extends BaseService<DataClassEntity> implement
         }
         List l = new ArrayList();
         for (DataClassEntity d : dataClassList) {
-            if(d.getDataClassId().startsWith("L")){
+            //if(d.getDataClassId().startsWith("L")){
                 TreeLevel tl = new TreeLevel();
                 tl.setId(d.getDataClassId());
                 tl.setParentId(d.getParentId());
                 tl.setName(d.getClassName());
                 tl.setType("1");
                 l.add(tl);
-            }
+            //}
         }
         return JSONArray.parseArray(BaseParser.parserListToLevelTree(l));
     }
@@ -645,4 +645,6 @@ public class DataClassServiceImpl extends BaseService<DataClassEntity> implement
         return this.dataClassMapper.toDto(byDataClassIdAndCreateBy);
 
     }
+
+
 }

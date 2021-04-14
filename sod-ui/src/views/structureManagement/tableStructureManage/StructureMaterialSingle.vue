@@ -445,7 +445,7 @@ export default {
       }
       //资料  初始化
       if (!this.isSourceTree && this.editMaterial) {
-        this.isDisabledEdit = true;
+        this.isDisabledEdit = false;
         this.getMaterialForm(this.editMaterial);
       }
 

@@ -10,7 +10,7 @@ const name = defaultSettings.title || "海天大数据存储管理系统"; // �
 
 const port = process.env.port || process.env.npm_config_port || 8080; // 端口
 
-const serverUrl = 'http://127.0.0.1:28038/cmadaas/sod';
+const serverUrl = 'http://127.0.0.1:28038/nudt/sod/';
 
 // vue.config.js 配置说明
 //官方vue.config.js 参考文档 https://cli.vuejs.org/zh/config/#css-loaderoptions

@@ -1,6 +1,7 @@
 package com.piesat.common.config;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
+import com.piesat.common.utils.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -18,6 +19,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -33,6 +35,9 @@ import static com.google.common.collect.Lists.newArrayList;
 @EnableKnife4j
 @Import(BeanValidatorPluginsConfiguration.class)
 public class Swagger2Config {
+    private static final List<String> excludedPathPrefix = Arrays.asList(
+            "/api"
+    );
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -40,6 +45,14 @@ public class Swagger2Config {
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.piesat"))
                 .paths(PathSelectors.any())
+        /*        .paths((s) -> {
+                    for(String pathPrefix : excludedPathPrefix) {
+                        if(StringUtils.startsWith(s, pathPrefix)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })*/
                 .build()
                 .securitySchemes(securitySchemes())
                 .securityContexts(securityContexts());

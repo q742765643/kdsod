@@ -1569,4 +1569,21 @@
     <select id="queryCassandra" resultType="java.util.Map">
         ${dataSql}
     </select>
+    <select id="queryParent" resultType="java.util.Map">
+        SELECT class_name as PARENTNAME,data_class_id as PARENTID FROM t_sod_data_class where LENGTH(data_class_id)=1
+        <if test="parentId != null and parentId != ''">
+            and data_class_id  = #{parentId}
+        </if>
+        <if test="parentName != null and parentName != ''">
+            AND class_name like CONCAT('%',#{parentName},'%')
+        </if>
+    </select>
+    <select id="queryChild"  resultType="java.util.Map">
+        SELECT A.DATA_CLASS_ID as DATACLASSID,B.CLASS_NAME as DATACLASSNAME
+        FROM T_SOD_DATA_LOGIC A, T_SOD_DATA_CLASS B where A.DATA_CLASS_ID = B.DATA_CLASS_ID
+        <if test="parentId != null and parentId != ''">
+            and substr(A.DATA_CLASS_ID,1,1)=#{parentId}
+        </if>
+
+    </select>
 </mapper>

@@ -34,6 +34,7 @@ public class RSAUtil {
         //生成公钥和私钥
         //genKeyPair();
         System.out.println(JSON.toJSONString(keyMap));
+
         //加密字符串
         String message = "111111";
         System.out.println("随机生成的公钥为:" + keyMap.get(0));
